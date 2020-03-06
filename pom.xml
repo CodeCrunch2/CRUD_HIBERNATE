@@ -46,6 +46,7 @@
                 <version>3.8.6</version>
                 <configuration>
                     <propertyFile>src/main/resources/liquidbase/liquibase.properties</propertyFile>
+                    <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                 </configuration>
                 <executions>
                     <execution>
