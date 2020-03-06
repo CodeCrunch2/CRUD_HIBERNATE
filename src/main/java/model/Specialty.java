@@ -1,10 +1,20 @@
 package model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Objects;
 
+@Entity
+@Table(name = "specialities")
 public class Specialty extends BaseEntity {
+    @Column(name = "speciality_name")
     private String specialtyName;
+    @Column(name = "description")
     private String description;
+
+    public Specialty() {
+    }
 
     public Specialty(String specialtyName, String description) {
         this.specialtyName = specialtyName;

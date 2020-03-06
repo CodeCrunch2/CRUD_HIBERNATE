@@ -49,21 +49,21 @@ public class SpecialityService {
         return specialityDtoList;
     }
 
-    public SpecialityDto deleteSpeciality(String specialityName){
+    public SpecialityDto deleteSpeciality(int id){
         SpecialityDto specialityDto;
-        if (!isExist(specialityName)) {
-            specialityDto = specialityMapper.exceptionMessageToSpecialityDto("There is no specialty with the same name");
+        if (!isExist(id)) {
+            specialityDto = specialityMapper.exceptionMessageToSpecialityDto("There is no specialty with such id");
             return specialityDto;
         }
-        Specialty specialty = new Specialty(specialityName, null);
+        Specialty specialty = specialityRepository.getById(id);
         specialityRepository.delete(specialty);
         return specialityMapper.specialityToDto(specialty);
     }
 
-    public SpecialityDto changeDescription(String specialityName, String specialityDescription) {
+    public SpecialityDto changeDescription(int id, String specialityDescription) {
         SpecialityDto specialityDto;
-        if (!isExist(specialityName)) {
-            specialityDto = specialityMapper.exceptionMessageToSpecialityDto("There is no specialty with the same name");
+        if (!isExist(id)) {
+            specialityDto = specialityMapper.exceptionMessageToSpecialityDto("There is no specialty with such id");
             return specialityDto;
         }
         if (!validateSpecialityDescription(specialityDescription)) {
@@ -71,7 +71,8 @@ public class SpecialityService {
             return specialityDto;
         }
 
-        Specialty specialty = new Specialty(specialityName, specialityDescription);
+        Specialty specialty = specialityRepository.getById(id);
+        specialty.setDescription(specialityDescription);
         specialityRepository.update(specialty);
         return specialityMapper.specialityToDto(specialty);
     }

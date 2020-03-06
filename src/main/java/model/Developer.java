@@ -1,13 +1,30 @@
 package model;
 
+import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "developers")
 public class Developer extends BaseEntity {
+    @Column(name = "first_name")
     private String firstName;
+
+    @Column(name = "last_name")
     private String lastName;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "speciality_id", nullable = true)
     private Specialty specialty;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "developers_skills",
+    joinColumns = @JoinColumn(name = "developer_id"),
+    inverseJoinColumns = @JoinColumn(name = "skill_id"))
     private List<Skill> skills;
+
+    public Developer() {
+    }
 
     public Developer(String firstName, String lastName, Specialty specialty, List<Skill> skills) {
         this.firstName = firstName;

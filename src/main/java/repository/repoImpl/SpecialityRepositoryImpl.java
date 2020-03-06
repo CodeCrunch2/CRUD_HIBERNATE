@@ -1,92 +1,62 @@
 package repository.repoImpl;
 
 import model.Specialty;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import repository.SpecialityRepository;
-import repository.connectionUtil.ConnectionUtil;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
+import repository.hibernateUtil.HibernateUtil;
 import java.util.List;
 
 public class SpecialityRepositoryImpl implements SpecialityRepository {
-    private static Connection connection = ConnectionUtil.getInstance().getConnection();
+
     @Override
     public void save(Specialty specialty) {
-        try (Statement statement = connection.createStatement()) {
-            String sql = "insert into specialities (speciality_name) values('" + specialty.getSpecialtyName() + "')";
-            statement.executeUpdate(sql);
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        session.save(specialty);
+        transaction.commit();
+        session.close();
 
     }
 
     @Override
     public void delete(Specialty specialty) {
-        try (Statement statement = connection.createStatement()) {
-            String sql = "delete from specialities where speciality_name = '" + specialty.getSpecialtyName() + "'";
-            statement.executeUpdate(sql);
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        session.delete(specialty);
+        transaction.commit();
+        session.close();
 
     }
 
     @Override
     public void update(Specialty specialty) {
-        try (Statement statement = connection.createStatement()) {
-            String sql = "update specialities set description = '" + specialty.getDescription() + "' where speciality_name = '" +
-                    specialty.getSpecialtyName() + "'";
-            statement.executeUpdate(sql);
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        session.update(specialty);
+        transaction.commit();
+        session.close();
 
     }
 
     @Override
     public List<Specialty> getAll() {
-        List<Specialty> specialtyList = new ArrayList<>();
-        try (Statement statement = connection.createStatement()) {
-            String sql = "select * from specialities";
-            ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                int specialityId = resultSet.getInt("id");
-                String specialityName = resultSet.getString("speciality_name");
-                String specialityDescription = resultSet.getString("description");
-                Specialty specialty = new Specialty(specialityName, specialityDescription);
-                specialty.setId(specialityId);
-                specialtyList.add(specialty);
-            }
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
+        List<Specialty> specialtyList;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        specialtyList = session.createQuery("from Specialty ").list();
+        transaction.commit();
+        session.close();
         return specialtyList;
     }
 
     @Override
     public Specialty getById(Integer id) {
-        Specialty specialty = new Specialty(null, null);
-        try (Statement statement = connection.createStatement()) {
-            String sql = "select * from specialities where id = " + (int)id;
-            ResultSet resultSet = statement.executeQuery(sql);
-            resultSet.next();
-            String specialityName = resultSet.getString("speciality_name");
-            String description = resultSet.getString("description");
-            specialty.setId(id);
-            specialty.setSpecialtyName(specialityName);
-            specialty.setDescription(description);
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Specialty specialty = session.get(Specialty.class, id);
+        transaction.commit();
+        session.close();
         return specialty;
     }
 }

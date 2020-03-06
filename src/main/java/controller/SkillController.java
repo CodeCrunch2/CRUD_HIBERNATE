@@ -32,8 +32,8 @@ public class SkillController {
         return skillService.showSkills();
     }
 
-    public SkillDto deleteSkill(String skillName) {
+    public SkillDto deleteSkill(int id) {
 
-        return skillService.deleteSkill(skillName);
+        return skillService.deleteSkill(id);
     }
 }

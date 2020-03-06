@@ -63,8 +63,7 @@ public class DeveloperService {
             developerDto = developerMapper.exceptionMessageToDeveloperDto("There is no developer with such id");
             return developerDto;
         }
-        Developer developer = new Developer(null, null, null, null);
-        developer.setId(id);
+        Developer developer = developerRepository.getById(id);
         developerRepository.delete(developer);
         return developerMapper.developerToDto(developer);
     }
@@ -79,9 +78,9 @@ public class DeveloperService {
             return developerDto;
         }
         Specialty specialty = specialityRepository.getById(specialityId);
-        Developer developer = new Developer(null, null, specialty, null);
-        developer.setId(developerId);
-        developerRepository.updateSpeciality(developer);
+        Developer developer = developerRepository.getById(developerId);
+        developer.setSpecialty(specialty);
+        developerRepository.update(developer);
         return developerMapper.developerToDto(developer);
 
     }
@@ -100,9 +99,9 @@ public class DeveloperService {
             return developerDto;
         }
         Skill skill = skillRepository.getById(skillId);
-        Developer developer = new Developer(null, null, null, null);
-        developer.setId(developerId);
-        developerRepository.addSkill(developer, skill);
+        Developer developer = developerRepository.getById(developerId);
+        developer.getSkills().add(skill);
+        developerRepository.update(developer);
         return developerMapper.developerToDto(developer);
     }
     public DeveloperDto deleteSkill(int developerId, int skillId) {
@@ -120,9 +119,9 @@ public class DeveloperService {
             return developerDto;
         }
         Skill skill = skillRepository.getById(skillId);
-        Developer developer = new Developer(null, null, null, null);
-        developer.setId(developerId);
-        developerRepository.deleteSkill(developer, skill);
+        Developer developer = developerRepository.getById(developerId);
+        developer.getSkills().remove(skill);
+        developerRepository.update(developer);
         return developerMapper.developerToDto(developer);
     }
 

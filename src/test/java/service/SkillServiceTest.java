@@ -76,7 +76,6 @@ public class SkillServiceTest {
         doReturn(true).when(skillService).validateSkillName(skillName);
         doReturn(true).when(skillService).isExist(skillName);
         when(skillMapper.exceptionMessageToSkillDto(message)).thenReturn(skillDto);
-
         assertEquals(skillDto, skillService.createSkill(skillName));
 
     }
@@ -102,28 +101,31 @@ public class SkillServiceTest {
     @Test
     public void deleteSkillExistSkill() {
         String skillName = "SkillName";
-        Skill skill = new Skill(skillName);
-        skill.setId(1);
-
+        int id = 1;
+        Skill skill = new Skill();
+        skill.setSkillName(skillName);
+        skill.setId(id);
         SkillDto skillDto = new SkillDto();
         skillDto.setSkillName(skillName);
-        skillDto.setId(1);
-        doReturn(true).when(skillService).isExist(skillName);
+        skillDto.setId(id);
+        doReturn(true).when(skillService).isExist(id);
+        when(skillRepository.getById(id)).thenReturn(skill);
         when(skillMapper.skillToDto(skill)).thenReturn(skillDto);
-        assertEquals(skillDto, skillService.deleteSkill(skillName));
+        assertEquals(skillDto, skillService.deleteSkill(id));
         verify(skillRepository).delete(skill);
+
 
     }
     @Test
     public void deleteSkillNotExistSkill() {
-        String skillName = "SN";
+        int id = 1;
         SkillDto skillDto = new SkillDto();
-        String message = "Skill with this name does not exist";
+        String message = "Skill with this id does not exist";
         skillDto.setErrorMessage(message);
-        doReturn(false).when(skillService).isExist(skillName);
+        doReturn(false).when(skillService).isExist(id);
         when(skillMapper.exceptionMessageToSkillDto(message)).thenReturn(skillDto);
 
-        assertEquals(skillDto, skillService.deleteSkill(skillName));
+        assertEquals(skillDto, skillService.deleteSkill(id));
 
     }
 

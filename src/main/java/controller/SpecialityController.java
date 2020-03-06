@@ -28,10 +28,10 @@ public class SpecialityController {
     public List<SpecialityDto> showSpecialities() {
         return specialityService.showSpecialities();
     }
-    public SpecialityDto deleteSpeciality(String specialityName) {
-        return specialityService.deleteSpeciality(specialityName);
+    public SpecialityDto deleteSpeciality(int id) {
+        return specialityService.deleteSpeciality(id);
     }
-    public SpecialityDto changeDescription(String specialityName, String specialityDescription) {
-        return specialityService.changeDescription(specialityName, specialityDescription);
+    public SpecialityDto changeDescription(int id, String specialityDescription) {
+        return specialityService.changeDescription(id, specialityDescription);
     }
 }

@@ -1,9 +1,19 @@
 package model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Objects;
 
+@Entity
+@Table(name = "skills")
 public class Skill extends BaseEntity {
+    @Column(name = "skill_name")
     private String skillName;
+
+
+    public Skill() {
+    }
 
     public Skill(String skillName) {
         this.skillName = skillName;

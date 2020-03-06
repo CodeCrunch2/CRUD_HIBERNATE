@@ -45,13 +45,13 @@ public class SkillService {
         return skillDtoList;
     }
 
-    public SkillDto deleteSkill(String skillName){
+    public SkillDto deleteSkill(int id){
         SkillDto skillDto;
-        if (!isExist(skillName)) {
-            skillDto = skillMapper.exceptionMessageToSkillDto("Skill with this name does not exist");
+        if (!isExist(id)) {
+            skillDto = skillMapper.exceptionMessageToSkillDto("Skill with this id does not exist");
             return skillDto;
         }
-        Skill skill = new Skill(skillName);
+        Skill skill = skillRepository.getById(id);
         skillRepository.delete(skill);
         return skillMapper.skillToDto(skill);
     }
